@@ -1,0 +1,9 @@
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+
+# initialize kernel
+/run/initialize
+
+# visualize setting
+/control/execute vis.mac
