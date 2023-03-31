@@ -1,7 +1,0 @@
-/home/arnon3339/playground/geant4/workspace/myB1/build/CMakeFiles/myB1.dir
-/home/arnon3339/playground/geant4/workspace/myB1/build/CMakeFiles/edit_cache.dir
-/home/arnon3339/playground/geant4/workspace/myB1/build/CMakeFiles/rebuild_cache.dir
-/home/arnon3339/playground/geant4/workspace/myB1/build/CMakeFiles/list_install_components.dir
-/home/arnon3339/playground/geant4/workspace/myB1/build/CMakeFiles/install.dir
-/home/arnon3339/playground/geant4/workspace/myB1/build/CMakeFiles/install/local.dir
-/home/arnon3339/playground/geant4/workspace/myB1/build/CMakeFiles/install/strip.dir

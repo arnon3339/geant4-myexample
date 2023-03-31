@@ -12,15 +12,18 @@
 #include "G4SystemOfUnits.hh"
 #include "G4STRead.hh"
 #include "CADMesh.hh"
+#include "G4VSolid.hh"
+
+#include <vector>
 
 namespace myb1
 {
     G4VPhysicalVolume* MyB1DetectorConstruction::Construct(){
         G4bool checkOverlaps = true;
         // define world size
-        G4double worldX = 50.0*cm;
-        G4double worldY = 50.0*cm;
-        G4double worldZ = 50.0*cm;
+        G4double worldX = 100.0*cm;
+        G4double worldY = 100.0*cm;
+        G4double worldZ = 200.0*cm;
 
         // instantiate nist to get Nist material standard
         G4NistManager* nist = G4NistManager::Instance();
@@ -50,28 +53,59 @@ namespace myb1
             checkOverlaps   // check overlaps
             );
 
-        auto mesh = CADMesh::TessellatedMesh::FromSTL("skull_ascii.stl"); 
+        // auto mesh = CADMesh::TessellatedMesh::FromSTL("skull_ascii.stl"); 
+        auto meshes = CADMesh::TessellatedMesh::FromOBJ("sample_objs.obj"); 
+        std::vector<G4VSolid *> meshes_v = meshes->GetSolids();
+        G4cout << "XXXXXXXXXXXXXXXXX" << G4endl;
+        for (auto v: meshes_v)
+            G4cout << v->GetName() << G4endl;
+        G4cout << "XXXXXXXXXXXXXXXXX" << G4endl;
+        // meshes->SetScale(10);
         G4LogicalVolume* logSkull = new G4LogicalVolume(
-            mesh->GetSolid(),
+            meshes->GetSolids(),
             nist->FindOrBuildMaterial("G4_BONE_CORTICAL_ICRP"),
             "Skull"
         );
-        mesh->SetScale(30000.0);
 
-        G4VisAttributes* visAtt = new G4VisAttributes();
-        visAtt->SetColor(G4Color::Blue());
-        visAtt->SetVisibility(true);
-        visAtt->SetForceSolid(true);
-        logSkull->SetVisAttributes(visAtt);
-        auto* physSkull = new G4PVPlacement(nullptr, // rotation
+        G4VisAttributes* visAttSkull = new G4VisAttributes();
+        visAttSkull->SetColor(G4Color::Blue());
+        visAttSkull->SetVisibility(true);
+        visAttSkull->SetForceSolid(true);
+        logSkull->SetVisAttributes(visAttSkull);
+
+
+        new G4PVPlacement(nullptr, // rotation
             G4ThreeVector(0, 0, 0), // position
             logSkull,        // logical volum
-            "World",        // name
+            "Skull",        // name
             worldLV,        // mother volum
             false,          // no boolean operation
             0,              // copy number
             checkOverlaps   // check overlaps
             );
+
+        // G4LogicalVolume* logBox = new G4LogicalVolume(
+        //     new G4Box("Box", 0.2*worldX, 0.2*worldY, 0.2*worldZ),
+        //     nist->FindOrBuildMaterial("G4_AIR"),
+        //     "Box"
+        // );
+
+        // G4VisAttributes* visAttBox = new G4VisAttributes();
+        // visAttBox->SetColor(G4Color::Red());
+        // visAttBox->SetVisibility(true);
+        // visAttBox->SetForceSolid(true);
+        // logBox->SetVisAttributes(visAttBox);
+
+
+        // new G4PVPlacement(nullptr, // rotation
+        //     G4ThreeVector(0, 0, 0.2*worldZ), // position
+        //     logBox,        // logical volum
+        //     "Box",        // name
+        //     worldLV,        // mother volum
+        //     false,          // no boolean operation
+        //     0,              // copy number
+        //     checkOverlaps   // check overlaps
+        //     );
 
         return physWorld;
     }

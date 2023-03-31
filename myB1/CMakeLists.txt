@@ -30,6 +30,8 @@ set(MYB1_SCRIPTS
     tsg_offscreen.mac
     skull.stl
     skull_ascii.stl
+    sample.obj
+    sample_objs.obj
 )
 
 foreach(_script ${MYB1_SCRIPTS})
