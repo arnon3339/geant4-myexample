@@ -1,3 +1,7 @@
+#include <string>
+#include <iostream>
+#include "argparse.hpp"
+
 #include "myB1DetectorConstrcution.hh"
 
 #include "G4UIExecutive.hh"
@@ -12,7 +16,23 @@
 
 using namespace myb1;
 int main(int argc, char** argv){
-    G4VUserDetectorConstruction* detector = new MyB1DetectorConstruction();
+    argparse::ArgumentParser program("program_name");
+    std::string phantom("");
+
+    program.add_argument("-P", "--phantom")
+        .default_value(std::string("sample_objs.obj"));
+
+    try {
+        program.parse_args(argc, argv);
+    } catch (const std::runtime_error& e) {
+        std::cout << e.what() << std::endl;
+        std::cout << program;
+        return 0;
+    }
+    phantom = program.get<std::string>("--phantom");
+
+    G4VUserDetectorConstruction* detector =
+     new MyB1DetectorConstruction(std::string(phantom));
 
     // check if ui is exist, if not instantiate ui with argc, and argv
     G4UIExecutive* ui = nullptr;

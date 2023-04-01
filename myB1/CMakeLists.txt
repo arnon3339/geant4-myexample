@@ -19,6 +19,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 add_executable(myB1 myB1.cc ${sources} ${headers})
 target_link_libraries(myB1 ${Geant4_LIBRARIES})
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/phantoms)
 
 set(MYB1_SCRIPTS
     myB1.in
@@ -28,10 +29,6 @@ set(MYB1_SCRIPTS
     run2.mac
     vis.mac
     tsg_offscreen.mac
-    skull.stl
-    skull_ascii.stl
-    sample.obj
-    sample_objs.obj
 )
 
 foreach(_script ${MYB1_SCRIPTS})
@@ -42,6 +39,21 @@ foreach(_script ${MYB1_SCRIPTS})
     )
 endforeach()
 
+set(MYB1_SCRIPTS
+    phantoms/skull.stl
+    phantoms/skull_ascii.stl
+    phantoms/sample.obj
+    phantoms/sample_objs.obj
+    phantoms/phantom_male.obj
+)
+
+foreach(_script ${MYB1_SCRIPTS})
+    configure_file(
+        ${PROJECT_SOURCE_DIR}/${_script}
+        ${PROJECT_BINARY_DIR}/${_script}
+        COPYONLY
+    )
+endforeach()
 # add_custom_target(myB1 DEPENDS myB1)
 
 install(TARGETS myB1 DESTINATION bin)
