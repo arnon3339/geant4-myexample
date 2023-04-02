@@ -1,6 +1,9 @@
 #include <array>
 #include <map>
 #include <string>
+#include "G4Color.hh"
+
+extern const G4Color DEFAULT_COLORS[];
 
 #ifndef MYB1PHANTOM_HH
 #define MYB1PHANTOM_HH 1
@@ -20,6 +23,10 @@ namespace myb1
       bool* isInUses;
       std::map<std::string, bool> phantomMap;
       void* memPhantom;
+
+    private:
+      bool hasColors; 
+      
   }; 
 } // namespace myb1
 

@@ -45,6 +45,7 @@ set(MYB1_SCRIPTS
     phantoms/sample.obj
     phantoms/sample_objs.obj
     phantoms/phantom_male.obj
+    phantoms/sample_tri.obj
 )
 
 foreach(_script ${MYB1_SCRIPTS})

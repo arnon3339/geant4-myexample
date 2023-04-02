@@ -9,6 +9,17 @@
 #include "G4NistManager.hh"
 #include "CADMesh.hh"
 
+const G4Color DEFAULT_COLORS[9] = {
+  G4Color::Green(),
+  G4Color::Blue(),
+  G4Color::Grey(),
+  G4Color::Red(),
+  G4Color::Brown(),
+  G4Color::Cyan(),
+  G4Color::Magenta(),
+  G4Color::White(),
+  G4Color::Yellow()
+};
 
 namespace myb1
 {
@@ -22,7 +33,7 @@ namespace myb1
 
   MyB1Phantom::MyB1Phantom(std::string phantom){
 
-    G4VisAttributes* visAtt = new G4VisAttributes();
+    hasColors = false;
     G4NistManager* nist = G4NistManager::Instance();
 
     auto meshes = std::shared_ptr<CADMesh::TessellatedMesh>();
@@ -32,7 +43,7 @@ namespace myb1
       meshes = CADMesh::TessellatedMesh::FromOBJ("./phantoms/phantom_female.obj");
     else
       meshes = CADMesh::TessellatedMesh::FromOBJ(std::string("./phantoms/").append(phantom));
-    meshes->SetScale(10);
+    meshes->SetScale(1000);
     auto meshes_v = meshes->GetSolids();
     logPhantoms = new G4LogicalVolume*[meshes_v.size()];
     isInUses = new bool[meshes_v.size()];
@@ -45,10 +56,15 @@ namespace myb1
         nist->FindOrBuildMaterial("G4_AIR"),
         mesh->GetName()
       );
-      visAtt->SetColor(G4Color::Blue());
-      visAtt->SetVisibility(true);
-      visAtt->SetForceSolid(true);
-      logPhantoms[meshIndex]->SetVisAttributes(visAtt);
+      if (hasColors){}
+      else
+      {
+        G4VisAttributes* visAtt = new G4VisAttributes();
+        visAtt->SetColor(DEFAULT_COLORS[meshIndex%9]);
+        visAtt->SetVisibility(true);
+        visAtt->SetForceSolid(true);
+        logPhantoms[meshIndex]->SetVisAttributes(visAtt);
+      }
       ++meshIndex;
     }
   }

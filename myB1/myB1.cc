@@ -2,7 +2,7 @@
 #include <iostream>
 #include "argparse.hpp"
 
-#include "myB1DetectorConstrcution.hh"
+#include "myB1DetectorConstruction.hh"
 
 #include "G4UIExecutive.hh"
 #include "G4SteppingVerbose.hh"
@@ -20,23 +20,25 @@ int main(int argc, char** argv){
     std::string phantom("");
 
     program.add_argument("-P", "--phantom")
-        .default_value(std::string("sample_objs.obj"));
+        .default_value(std::string("sample.obj"));
 
     try {
         program.parse_args(argc, argv);
     } catch (const std::runtime_error& e) {
         std::cout << e.what() << std::endl;
-        std::cout << program;
         return 0;
     }
     phantom = program.get<std::string>("--phantom");
 
+    // std::cout << "XXX " << phantom << " YYY" << std::endl;
+
     G4VUserDetectorConstruction* detector =
-     new MyB1DetectorConstruction(std::string(phantom));
+     new MyB1DetectorConstruction(phantom);
 
     // check if ui is exist, if not instantiate ui with argc, and argv
     G4UIExecutive* ui = nullptr;
-    if (argc == 1) ui = new G4UIExecutive(argc, argv);
+    // if (argc == 1) ui = new G4UIExecutive(argc, argv);
+    ui = new G4UIExecutive(argc, argv);
 
     // use G4SteppingVerboseWithUnits
     G4int precision = 4;

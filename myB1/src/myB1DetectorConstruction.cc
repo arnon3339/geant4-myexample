@@ -1,4 +1,4 @@
-#include "myB1DetectorConstrcution.hh"
+#include "myB1DetectorConstruction.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Color.hh"
